@@ -1,8 +1,8 @@
 ﻿# Welcome to Grupo5-BD2021!
 
-Proyecto de la catedra de **Base de Datos**
+Proyecto de la catedra **Base de Datos**
 
-#Objetivo
+# Objetivo
 
 Registro de funcionario y la Generación de la tarjeta RFID
 
