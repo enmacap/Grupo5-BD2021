@@ -1,3 +1,6 @@
+// Habilita los cambios a la Base de Datos
+// DAO : Direct Access Object
+// Enlace entre java y la BD
 package bdmodelo;
 
 public class Funcionario {
