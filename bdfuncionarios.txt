@@ -1,0 +1,26 @@
+CREATE DATABASE bdfuncionarios;
+USE bdfuncionarios;
+CREATE TABLE departamento(
+id_departamento INT AUTO_INCREMENT,
+nombre VARCHAR(45),
+infectados INT,
+PRIMARY KEY(id_departamento)
+);
+CREATE TABLE tarjeta(
+codigo_rfid INT,
+PRIMARY KEY(codigo_rfid)
+);
+CREATE TABLE funcionario(
+id_funcionario INT,
+usuario VARCHAR(25),
+passwrd VARCHAR(25),
+nombre VARCHAR(45),
+apellido VARCHAR(45),
+correo VARCHAR(45),
+departamento_id INT,
+rfid_codigo INT,
+PRIMARY KEY(id_funcionario),
+FOREIGN KEY(departamento_id) REFERENCES departamento(id_departamento),
+FOREIGN KEY(rfid_codigo) REFERENCES tarjeta(codigo_rfid)
+);
+SHOW TABLES;
