@@ -16,8 +16,7 @@
 CREATE TABLE IF NOT EXISTS `departamento` (
   `id_departamento` int(11) NOT NULL AUTO_INCREMENT,
   `nombre` varchar(45) DEFAULT NULL,
-  `infectados` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id_departamento`)
+  PRIMARY KEY (`id_departamento`)departamento
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Volcando datos para la tabla bdfuncionarios.departamento: ~0 rows (aproximadamente)
@@ -62,3 +61,4 @@ DELETE FROM `tarjeta`;
 /*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40111 SET SQL_NOTES=IFNULL(@OLD_SQL_NOTES, 1) */;
+autosbdfuncionariosfuncionario
