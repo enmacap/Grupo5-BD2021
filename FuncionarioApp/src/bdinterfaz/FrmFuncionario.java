@@ -58,7 +58,8 @@ public class FrmFuncionario extends javax.swing.JDialog {
             model.removeRow(0);
         }
     }
-    private boolean verificar(){
+    //Verifica que todos los campos se llenen
+    private boolean verificar(){ 
         boolean resultado=false;
         if(txt_idfuncionario.getText().equals("")){
             JOptionPane.showMessageDialog(this,"Debe ingresar el identificador de funcionario");
@@ -102,7 +103,6 @@ public class FrmFuncionario extends javax.swing.JDialog {
         }
         return true;
     }
-        
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -170,6 +170,11 @@ public class FrmFuncionario extends javax.swing.JDialog {
         btnEliminar.setText("Eliminar");
 
         btnVolver.setText("Volver");
+        btnVolver.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVolverActionPerformed(evt);
+            }
+        });
 
         jLabel7.setText("Contraseña");
 
@@ -282,9 +287,7 @@ public class FrmFuncionario extends javax.swing.JDialog {
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 450, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 11, Short.MAX_VALUE))
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 257, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -300,7 +303,8 @@ public class FrmFuncionario extends javax.swing.JDialog {
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         pack();
@@ -324,6 +328,8 @@ public class FrmFuncionario extends javax.swing.JDialog {
                 func.setCorreo(txt_correo.getText());
                 func.setDepartamento_id(Integer.parseInt(txt_departamento.getText()));
                 func.setRfid_codigo(Integer.parseInt(txt_rfid.getText()));
+                funcDAO = new FuncionarioDAO();
+                funcDAO.insertar(func);
                 limpiar();
                 habilitar(false);
                 listar();
@@ -332,9 +338,57 @@ public class FrmFuncionario extends javax.swing.JDialog {
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-        
+        String nombre=btnEditar.getText();
+        func = new Funcionario();
+        if(nombre.equalsIgnoreCase("Editar")){
+            txt_idfuncionario.setEnabled(true);
+            btnEditar.setText("Buscar");
+        }else if(nombre.equalsIgnoreCase("Buscar")){
+           if(txt_idfuncionario.getText().equals("")){
+               JOptionPane.showMessageDialog(this,"Debe ingresar ID del funcionario");
+               txt_idfuncionario.requestFocus();
+           }
+           funcDAO.buscar(Integer.parseInt(txt_idfuncionario.getText()));
+           txt_idfuncionario.setText(func.getId_funcionario()+"");
+           txt_usuario.setText(func.getUsuario());
+           txt_passwrd.setText(func.getPasswrd());
+           txt_nombre.setText(func.getNombre());
+           txt_apellido.setText(func.getApellido());
+           txt_correo.setText(func.getCorreo());
+           txt_departamento.setText(func.getDepartamento_id()+"");
+           txt_rfid.setText(func.getRfid_codigo()+"");
+           btnAgregar.setText("Guardar");
+        }else{
+            func.setId_funcionario(Integer.parseInt(txt_idfuncionario.getText()));
+            func.setUsuario(txt_usuario.getText());
+            func.setPasswrd(txt_passwrd.getPassword().toString());
+            func.setNombre(txt_nombre.getText());
+            func.setApellido(txt_apellido.getText());
+            func.setCorreo(txt_correo.getText());
+            func.setDepartamento_id(Integer.parseInt(txt_departamento.getText()));
+            func.setRfid_codigo(Integer.parseInt(txt_rfid.getText()));
+            funcDAO = new FuncionarioDAO();
+            funcDAO.editar(func);
+            habilitar(false);
+            limpiarCampos();
+            listar();
+        }
     }//GEN-LAST:event_btnEditarActionPerformed
 
+    private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
+        // TODO add your handling code here:
+        dispose();
+    }//GEN-LAST:event_btnVolverActionPerformed
+    private void limpiarCampos(){
+        txt_apellido.setText("");
+        txt_correo.setText("");
+        txt_departamento.setText("");
+        txt_idfuncionario.setText("");
+        txt_nombre.setText("");
+        txt_usuario.setText("");
+        txt_passwrd.setText("");
+        txt_rfid.setText("");
+    }
     /**
      * @param args the command line arguments
      */

@@ -101,7 +101,27 @@ public class FuncionarioDAO {
         }
         return r;
     }
-    
+    // Obtener funcionario
+    public Funcionario buscar(int id) {
+        Funcionario a = new Funcionario();
+        String sql= "SELECT * FROM funcionario WHERE id_funcionario=?";
+        try{
+            con = c.conectar();
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            a.setId_funcionario(rs.getInt("id_funcionario"));
+            a.setUsuario(rs.getString("usuario"));
+            a.setPasswrd(rs.getString("passwrd"));
+            a.setNombre(rs.getString("nombre"));
+            a.setApellido(rs.getString("apellido"));
+            a.setCorreo(rs.getString("correo"));
+            a.setDepartamento_id(rs.getInt("departamento_id"));
+            a.setRfid_codigo(rs.getInt("rfid_codigo"));
+        }catch(Exception e) {
+            
+        }
+        return a;
+    }
     // Eliminar
     public boolean borrar(String id_funcionario) {
         String sql= "DELETE FROM funcionario WHERE id_funcionario=" + id_funcionario;
