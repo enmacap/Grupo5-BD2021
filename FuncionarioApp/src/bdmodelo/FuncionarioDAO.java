@@ -103,7 +103,7 @@ public class FuncionarioDAO {
     }
     
     // Eliminar
-        public boolean borrar(String id_funcionario) {
+    public boolean borrar(String id_funcionario) {
         String sql= "DELETE FROM funcionario WHERE id_funcionario=" + id_funcionario;
         try {
             con = c.conectar();
