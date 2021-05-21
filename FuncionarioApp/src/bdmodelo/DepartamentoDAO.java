@@ -48,6 +48,7 @@ public class DepartamentoDAO {
         String sql= "INSERT INTO funcionario (id_departamento,nombre) " +
                 "VALUES (?,?)";
         try {
+            
             con = c.conectar();
             ps = con.prepareStatement(sql);
             ps.setInt(1, a.getId_departamento());
@@ -57,8 +58,8 @@ public class DepartamentoDAO {
                 r = true;
             }
         }catch(Exception e) {
-        
         }
+        
         return r;
     }
     

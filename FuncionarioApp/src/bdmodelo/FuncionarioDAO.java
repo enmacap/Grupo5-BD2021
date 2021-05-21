@@ -6,9 +6,8 @@ package bdmodelo;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.List;
-import bdcontrolador.Conexion;
+import java.util.*;
+import bdcontrolador.*;
 
 public class FuncionarioDAO {
     private Conexion c = new Conexion();
