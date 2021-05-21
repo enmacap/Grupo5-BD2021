@@ -36,6 +36,17 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="Departamento"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnudepartamentoActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="mnutarjeta">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Tarjetas"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnutarjetaActionPerformed"/>
+              </Events>
             </MenuItem>
           </SubComponents>
         </Menu>

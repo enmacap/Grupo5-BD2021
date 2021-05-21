@@ -31,7 +31,7 @@ public class TarjetaDAO {
             rs = ps.executeQuery();
             while (rs.next()) {
                 Tarjeta a = new Tarjeta();
-                a.setCodigo_rfid(rs.getInt("codigo_rfid"));
+                a.setCodigo_rfid(rs.getString("codigo_rfid"));
                 lista.add(a);
             }
         }catch(Exception e) {
@@ -49,7 +49,7 @@ public class TarjetaDAO {
         try {
             con = c.conectar();
             ps = con.prepareStatement(sql);
-            ps.setInt(1, a.getCodigo_rfid());
+            ps.setString(1, a.getCodigo_rfid());
             int resultado = ps.executeUpdate();
             if (resultado == 0) {
                 r = true;
@@ -67,7 +67,7 @@ public class TarjetaDAO {
         try {
             con = c.conectar();
             ps = con.prepareStatement(sql);
-            ps.setInt(1, a.getCodigo_rfid());
+            ps.setString(1, a.getCodigo_rfid());
             int resultado = ps.executeUpdate();
             if (resultado == 0) {
                 r = true;

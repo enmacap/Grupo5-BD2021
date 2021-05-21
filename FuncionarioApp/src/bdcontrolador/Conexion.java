@@ -13,7 +13,7 @@ public class Conexion {
     public Conexion(){
         // Cargamos el driver para instanciar el objeto: con
         // Carga del driver + instanciacion: puede generar errores
-        // por lo que:
+        //por lo que:
         try{
             // el codigo susceptible a generar errores
             Class.forName("org.gjt.mm.mysql.Driver");

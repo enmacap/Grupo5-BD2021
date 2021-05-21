@@ -20,6 +20,7 @@ public class Principal extends javax.swing.JFrame {
         jMenu2 = new javax.swing.JMenu();
         mnufuncionario = new javax.swing.JMenuItem();
         mnudepartamento = new javax.swing.JMenuItem();
+        mnutarjeta = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -46,7 +47,20 @@ public class Principal extends javax.swing.JFrame {
         jMenu2.add(mnufuncionario);
 
         mnudepartamento.setText("Departamento");
+        mnudepartamento.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnudepartamentoActionPerformed(evt);
+            }
+        });
         jMenu2.add(mnudepartamento);
+
+        mnutarjeta.setText("Tarjetas");
+        mnutarjeta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnutarjetaActionPerformed(evt);
+            }
+        });
+        jMenu2.add(mnutarjeta);
 
         jMenuBar1.add(jMenu2);
 
@@ -73,7 +87,21 @@ public class Principal extends javax.swing.JFrame {
 
     private void mnufuncionarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnufuncionarioActionPerformed
         // TODO add your handling code here:
+        FrmFuncionario form=new FrmFuncionario(this,true);
+        form.setVisible(true);
     }//GEN-LAST:event_mnufuncionarioActionPerformed
+
+    private void mnudepartamentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnudepartamentoActionPerformed
+        // TODO add your handling code here:
+        FrmDepartamento form=new FrmDepartamento(this,true);
+        form.setVisible(true);
+    }//GEN-LAST:event_mnudepartamentoActionPerformed
+
+    private void mnutarjetaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnutarjetaActionPerformed
+        // TODO add your handling code here:
+        FrmTarjeta form=new FrmTarjeta(this,true);
+        form.setVisible(true);
+    }//GEN-LAST:event_mnutarjetaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -117,5 +145,6 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JMenuItem mnuSalir;
     private javax.swing.JMenuItem mnudepartamento;
     private javax.swing.JMenuItem mnufuncionario;
+    private javax.swing.JMenuItem mnutarjeta;
     // End of variables declaration//GEN-END:variables
 }

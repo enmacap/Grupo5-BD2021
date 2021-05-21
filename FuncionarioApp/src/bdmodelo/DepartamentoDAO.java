@@ -96,4 +96,20 @@ public class DepartamentoDAO {
         }
         return false;
     }
+    
+    // Buscar
+    public Departamento buscar(int id) {
+        Departamento a = new Departamento();
+        String sql= "SELECT * FROM departamento WHERE id_departamento=?";
+        try{
+            con = c.conectar();
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            a.setId_departamento(rs.getInt("id_departamento"));
+            a.setNombre(rs.getString("nombre"));
+        }catch(Exception e) {
+            
+        }
+        return a;
+    }
 }

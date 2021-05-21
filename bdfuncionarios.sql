@@ -12,11 +12,18 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
+
+-- Volcando estructura de base de datos para bdfuncionarios
+DROP DATABASE IF EXISTS `bdfuncionarios`;
+CREATE DATABASE IF NOT EXISTS `bdfuncionarios` /*!40100 DEFAULT CHARACTER SET utf8mb4 */;
+USE `bdfuncionarios`;
+
 -- Volcando estructura para tabla bdfuncionarios.departamento
+DROP TABLE IF EXISTS `departamento`;
 CREATE TABLE IF NOT EXISTS `departamento` (
   `id_departamento` int(11) NOT NULL AUTO_INCREMENT,
   `nombre` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`id_departamento`)departamento
+  PRIMARY KEY (`id_departamento`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Volcando datos para la tabla bdfuncionarios.departamento: ~0 rows (aproximadamente)
@@ -25,6 +32,7 @@ DELETE FROM `departamento`;
 /*!40000 ALTER TABLE `departamento` ENABLE KEYS */;
 
 -- Volcando estructura para tabla bdfuncionarios.funcionario
+DROP TABLE IF EXISTS `funcionario`;
 CREATE TABLE IF NOT EXISTS `funcionario` (
   `id_funcionario` int(11) NOT NULL,
   `usuario` varchar(25) DEFAULT NULL,
@@ -47,6 +55,7 @@ DELETE FROM `funcionario`;
 /*!40000 ALTER TABLE `funcionario` ENABLE KEYS */;
 
 -- Volcando estructura para tabla bdfuncionarios.tarjeta
+DROP TABLE IF EXISTS `tarjeta`;
 CREATE TABLE IF NOT EXISTS `tarjeta` (
   `codigo_rfid` int(11) NOT NULL,
   PRIMARY KEY (`codigo_rfid`)
@@ -61,4 +70,3 @@ DELETE FROM `tarjeta`;
 /*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40111 SET SQL_NOTES=IFNULL(@OLD_SQL_NOTES, 1) */;
-autosbdfuncionariosfuncionariofuncionario

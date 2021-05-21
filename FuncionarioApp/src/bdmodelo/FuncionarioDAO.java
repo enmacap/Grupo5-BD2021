@@ -38,7 +38,7 @@ public class FuncionarioDAO {
                 a.setApellido(rs.getString("apellido"));
                 a.setCorreo(rs.getString("correo"));
                 a.setDepartamento_id(rs.getInt("departamento_id"));
-                a.setRfid_codigo(rs.getInt("rfid_codigo"));
+                a.setRfid_codigo(rs.getString("rfid_codigo"));
                 lista.add(a);
             }
         }catch(Exception e) {
@@ -64,7 +64,7 @@ public class FuncionarioDAO {
             ps.setString(5, a.getApellido());
             ps.setString(6, a.getCorreo());
             ps.setInt(7, a.getDepartamento_id());
-            ps.setInt(8, a.getRfid_codigo());
+            ps.setString(8, a.getRfid_codigo());
             int resultado = ps.executeUpdate();
             if (resultado == 0) {
                 r = true;
@@ -90,7 +90,7 @@ public class FuncionarioDAO {
             ps.setString(4, a.getApellido());
             ps.setString(5, a.getCorreo());
             ps.setInt(6, a.getDepartamento_id());
-            ps.setInt(7, a.getRfid_codigo());
+            ps.setString(7, a.getRfid_codigo());
             ps.setInt(8, a.getId_funcionario());
             int resultado = ps.executeUpdate();
             if (resultado == 0) {
@@ -116,7 +116,7 @@ public class FuncionarioDAO {
             a.setApellido(rs.getString("apellido"));
             a.setCorreo(rs.getString("correo"));
             a.setDepartamento_id(rs.getInt("departamento_id"));
-            a.setRfid_codigo(rs.getInt("rfid_codigo"));
+            a.setRfid_codigo(rs.getString("rfid_codigo"));
         }catch(Exception e) {
             
         }

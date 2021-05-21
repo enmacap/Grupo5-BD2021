@@ -3,17 +3,17 @@ import bdmodelo.*;
 import java.util.*;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+
 public class FrmFuncionario extends javax.swing.JDialog {
     private Funcionario func;
     private FuncionarioDAO funcDAO;
-    
     public FrmFuncionario(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         setTitle("Datos de los funcionarios de la empresa");
         setLocationRelativeTo(null);
-        habilitar(false);
         listar();
+        habilitar(false);
     }
     private void limpiar  (){
         txt_apellido.setText("");
@@ -40,7 +40,7 @@ public class FrmFuncionario extends javax.swing.JDialog {
         funcDAO = new FuncionarioDAO();
         List<Funcionario> lista=funcDAO.listar();
         DefaultTableModel model= (DefaultTableModel)tblDatos.getModel();
-        for(Funcionario p:lista){ 
+        for(Funcionario p:lista){
             Object datos[]=new Object[6];
             datos[0]=p.getId_funcionario();
             datos[1]=p.getUsuario();
@@ -168,6 +168,11 @@ public class FrmFuncionario extends javax.swing.JDialog {
         });
 
         btnEliminar.setText("Eliminar");
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
 
         btnVolver.setText("Volver");
         btnVolver.addActionListener(new java.awt.event.ActionListener() {
@@ -327,7 +332,7 @@ public class FrmFuncionario extends javax.swing.JDialog {
                 func.setApellido(txt_apellido.getText());
                 func.setCorreo(txt_correo.getText());
                 func.setDepartamento_id(Integer.parseInt(txt_departamento.getText()));
-                func.setRfid_codigo(Integer.parseInt(txt_rfid.getText()));
+                func.setRfid_codigo(txt_rfid.getText());
                 funcDAO = new FuncionarioDAO();
                 funcDAO.insertar(func);
                 limpiar();
@@ -366,11 +371,11 @@ public class FrmFuncionario extends javax.swing.JDialog {
             func.setApellido(txt_apellido.getText());
             func.setCorreo(txt_correo.getText());
             func.setDepartamento_id(Integer.parseInt(txt_departamento.getText()));
-            func.setRfid_codigo(Integer.parseInt(txt_rfid.getText()));
+            func.setRfid_codigo(txt_rfid.getText());
             funcDAO = new FuncionarioDAO();
             funcDAO.editar(func);
             habilitar(false);
-            limpiarCampos();
+            limpiar();
             listar();
         }
     }//GEN-LAST:event_btnEditarActionPerformed
@@ -379,15 +384,26 @@ public class FrmFuncionario extends javax.swing.JDialog {
         // TODO add your handling code here:
         dispose();
     }//GEN-LAST:event_btnVolverActionPerformed
-    private void limpiarCampos(){
-        txt_apellido.setText("");
-        txt_correo.setText("");
-        txt_departamento.setText("");
-        txt_idfuncionario.setText("");
-        txt_nombre.setText("");
-        txt_usuario.setText("");
-        txt_passwrd.setText("");
-        txt_rfid.setText("");
+
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        // TODO add your handling code here:
+        String nombre=btnEditar.getText();
+        func = new Funcionario();
+        if(nombre.equalsIgnoreCase("Editar")){
+            txt_idfuncionario.setEnabled(true);
+            btnEditar.setText("Buscar");
+        }else{
+           if(txt_idfuncionario.getText().equals("")){
+               JOptionPane.showMessageDialog(this,"Debe ingresar ID del funcionario");
+               txt_idfuncionario.requestFocus();
+           }else{
+            funcDAO = new FuncionarioDAO();
+            funcDAO.borrar(txt_idfuncionario.getText());
+            habilitar(false);
+            limpiar();
+            listar();
+        }
+    }//GEN-LAST:event_btnEliminarActionPerformed
     }
     /**
      * @param args the command line arguments

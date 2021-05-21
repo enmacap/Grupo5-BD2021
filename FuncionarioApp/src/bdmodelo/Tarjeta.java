@@ -1,14 +1,14 @@
 package bdmodelo;
 public class Tarjeta {
     // Atributo
-    private int codigo_rfid;
+    private String codigo_rfid;
     //Constructor
     public Tarjeta() {}
     // Set & Get
-    public int getCodigo_rfid() {
+    public String getCodigo_rfid() {
         return codigo_rfid;
     }
-    public void setCodigo_rfid(int c) {
+    public void setCodigo_rfid(String c) {
         codigo_rfid = c;
     }
 }

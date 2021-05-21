@@ -12,7 +12,7 @@ public class Funcionario {
     private String apellido;
     private String correo;
     private int departamento_id;
-    private int rfid_codigo;
+    private String rfid_codigo;
     
     //Constructor
     public Funcionario() {}
@@ -68,10 +68,10 @@ public class Funcionario {
         this.departamento_id = departamento_id;
     }
     // RFID
-    public int getRfid_codigo() {
+    public String getRfid_codigo() {
         return rfid_codigo;
     }
-    public void setRfid_codigo(int rfid_codigo) {
+    public void setRfid_codigo(String rfid_codigo) {
         this.rfid_codigo = rfid_codigo;
     }
 }
