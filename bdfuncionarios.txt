@@ -1,17 +1,18 @@
 CREATE DATABASE bdfuncionarios;
 USE bdfuncionarios;
 CREATE TABLE departamento(
-id_departamento INT AUTO_INCREMENT,
-nombre VARCHAR(45),
+id_departamento INT NOT NULL AUTO_INCREMENT,
+PRIMARY KEY(id_departamento),
+nombre VARCHAR(150),
 infectados INT,
-PRIMARY KEY(id_departamento)
 );
 CREATE TABLE tarjeta(
-codigo_rfid INT,
-PRIMARY KEY(codigo_rfid)
+INT NOT NULL AUTO_INCREMENT,
+PRIMARY KEY(id_tarjeta),
+codigo_rfid VARCAHR
 );
 CREATE TABLE funcionario(
-id_funcionario INT,
+id_funcionario INT NOT NULL AUTO_INCREMENT,
 usuario VARCHAR(25),
 passwrd VARCHAR(25),
 nombre VARCHAR(45),
@@ -24,3 +25,43 @@ FOREIGN KEY(departamento_id) REFERENCES departamento(id_departamento),
 FOREIGN KEY(rfid_codigo) REFERENCES tarjeta(codigo_rfid)
 );
 SHOW TABLES;
+CREATE TABLE funcionario(
+    id_funcionario INT NOT NULL AUTO_INCREMENT,
+    PRIMARY KEY(id_funcionario),
+    ci VARCHAR(150),
+    nombre VARCHAR(150),
+    apellido VARCHAR(150),
+    correo VARCHAR(150),
+    infectado VARCHAR(20),
+    departamento_id INT,
+    tarjeta_id INT,
+    FOREIGN KEY(departamento_id) REFERENCES departamento(id_departamento),
+    FOREIGN KEY(tarjeta_id) REFERENCES tarjeta(id_tarjeta)
+    )
+
+para cambiar una columna de una tabla
+ALTER TABLE usuarios CHANGE telelfono celular INT(11)
+
+para agregar una columna a una tabla
+ALTER TABLE usuarios ADD COLUMN (direcion VARCHAR(20))
+
+como borrar una columna de una tabla
+ALTER TABLE usuarios DROP COLUMN edad
+
+para insertar 
+INSERT INTO clientes (id_cliente,nombre, apellido,edad, telefono) VALUES('2','ALEX','GONZALES','29','77777')
+
+para mostrar
+SELECT nombre, apellido FROM clientes WHERE id_cliente= 10 AND apellido= 'castro'
+
+para inserta una tabla fk
+INSERT INTO pedidos(fecha, cantidad, id_cliente, id_producto) VALUES('','','','')
+
+para ingresar a las tablas fk
+SELECT * FROM clientes INNER JOIN pedidos ON clientes.id_clinete = pedidos.id_cliente
+
+SELECT * FROM clientes LEFT JOIN pedidos ON clientes.id_clientes = pedidos.id_pedido
+SELECT * FROM clientes RIGHT JOIN pedidos ON clientes.id_clientes = pedidos.id_pedido
+
+INSERT INTO `funcionario`(`id_funcionario`, `ci`, `nombre`, `apellido`, `correo`, `departamento_id`, `rfid_codigo`) VALUES ([value-1],[value-2],[value-3],[value-4],[value-5],[value-6],[value-7])
+
