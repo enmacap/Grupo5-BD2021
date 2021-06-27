@@ -3,26 +3,25 @@ USE bdfuncionarios;
 CREATE TABLE departamento(
 id_departamento INT NOT NULL AUTO_INCREMENT,
 PRIMARY KEY(id_departamento),
-nombre VARCHAR(150),
-infectados INT,
+dpnombre VARCHAR(150)
 );
 CREATE TABLE tarjeta(
-INT NOT NULL AUTO_INCREMENT,
+id_tarjeta INT NOT NULL AUTO_INCREMENT,
 PRIMARY KEY(id_tarjeta),
-codigo_rfid VARCAHR
+codigo_rfid VARCHAR(300)
 );
 CREATE TABLE funcionario(
 id_funcionario INT NOT NULL AUTO_INCREMENT,
-usuario VARCHAR(25),
-passwrd VARCHAR(25),
-nombre VARCHAR(45),
-apellido VARCHAR(45),
-correo VARCHAR(45),
+ci VARCHAR(150),
+nombre VARCHAR(150),
+apellido VARCHAR(150),
+correo VARCHAR(150),
+infectado VARCHAR(150),
 departamento_id INT,
-rfid_codigo INT,
+tarjeta_id INT,
 PRIMARY KEY(id_funcionario),
 FOREIGN KEY(departamento_id) REFERENCES departamento(id_departamento),
-FOREIGN KEY(rfid_codigo) REFERENCES tarjeta(codigo_rfid)
+FOREIGN KEY(tarjeta_id) REFERENCES tarjeta(id_tarjeta)
 );
 SHOW TABLES;
 CREATE TABLE funcionario(

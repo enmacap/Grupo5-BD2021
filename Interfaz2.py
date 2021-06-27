@@ -14,7 +14,7 @@ def write():
     reader = SimpleMFRC522()
 
     try:
-        text=" hola"
+        text="Tarjeta"
         #text = input('Valor del NFC:')
         print(" Ponga su tarjeta para resgistrar")
         reader.write(text)
@@ -35,14 +35,14 @@ def read():
 DB_HOST = 'localhost'
 DB_USER = 'grupo5'
 DB_PASS = '12345'
-DB_NAME = 'bdfuncionario'
+DB_NAME = 'bdfuncionarios'
 
 datos = [DB_HOST, DB_USER,  DB_PASS, DB_NAME]
 miConexion =MySQLdb.connect(*datos)
 
 root = Tk()
 root.title(" Grupo 5")
-root.geometry("1000x900")
+root.geometry("1000x550")
 
 #declacion de las variables para los campos
 miId= IntVar()
@@ -69,9 +69,10 @@ def conexionBBDD():
     #miCursor = miConexion.cursor()
 
 def eliminarBBDD():
+    miConexion =MySQLdb.connect(*datos)
     miCursor = miConexion.cursor()
     if messagebox.askyesno(message="Los datos se perderan definitivamente, Desea continuar?", title= "ADVERTENCIA"):
-        miCursor.execute("DROP TABLE Funcionario")
+        miCursor.execute("DELETE FROM funcionario WHERE id_funcionario = '%s'" % miId)
     else:
         pass
     limpiarCampos()
@@ -94,19 +95,21 @@ def limpiarCampos():
     miInfectado.set("")
     miTarjeta.set("")
     micodigo_rfid.set("")
-    
+    listaT.current(0)
+    listaD.current(0)
     
 def mensaje():
     acerca = '''Aplicacion Trabajo Base de Datos \n
                 Integrantes:\n
-                -\n
-                -\n
-                -\n
-                -\n
+                -Jessica Pizarro\n
+                -Anderson Barrientos\n
+                -Moisés Caballero\n
+                -Enmanuel Capdevila\n
+                -Christian Gómez\n
                 Tutores:
-                -\n
-                -\n
-                -\n
+                -Isaura Flores\n
+                -Ricardo Fabio\n
+                -Rodney Rojas\n
                 '''
     messagebox.showinfo(title="INFORMACION", message= acerca)
 
@@ -115,135 +118,160 @@ def crearFuncionario():
     miCursor = miConexion.cursor()
     miTarjeta.set(listaT.current()+1)
     miDepartamento.set(listaD.current()+1)
-    try:
-        sql = '''INSERT INTO funcionario( ci, nombre, apellido, correo, infectado, departamento_id, tarjeta_id)
-            VALUES (%s, %s, %s, %s, %s, %s, %s);'''
-        miCursor.execute(sql, (miCi.get(), miNombre.get(), miApellido.get(), miCorreo.get(),miInfectado.get(),int(miDepartamento.get()),int(miTarjeta.get())))
-        miConexion.commit()
-    except:
-        messagebox.showwarning("ADVERTENCIA","Ocurrio un error")
-        pass
-    limpiarCampos()
-    mostrar()
-    miCursor.close()
+    
+    miCursor.execute("SELECT  * FROM funcionario WHERE tarjeta_id= '%s'" %miTarjeta.get())
+    datos_f = miCursor.fetchall()
+    print(datos_f)
+    for fila in datos_f:
+        print(fila)
+        h= fila[1] + " " + fila[2] + " " + fila[3]+ " " + fila[4]
+    
+    
+    if datos_f == ():
+        try:
+            sql = '''INSERT INTO funcionario( ci, nombre, apellido, correo, infectado, departamento_id, tarjeta_id)
+                VALUES (%s, %s, %s, %s, %s, %s, %s);'''
+            miCursor.execute(sql, (miCi.get(), miNombre.get(), miApellido.get(), miCorreo.get(),miInfectado.get(),int(miDepartamento.get()),int(miTarjeta.get())))
+            miConexion.commit()
+        except:
+            messagebox.showwarning("ADVERTENCIA","Ocurrio un error")
+            pass
+        limpiarCampos()
+        mostrar()
+        miCursor.close()
+    else:
+        
+        messagebox.showwarning("ADVERTENCIA","Esta tarjeta ya fue asignada\n"+ h)
 
 def crearDepartamento():
     cmiDepartamento = StringVar()
     ventanaD = Toplevel()
-    ventanaD.title("Crear Departamento")
-    ventanaD.geometry("500x500")
+    ancho_ventana = 280
+    alto_ventana = 150
+    x_ventana = ventanaD.winfo_screenwidth() // 2 - ancho_ventana // 2
+    y_ventana = ventanaD.winfo_screenheight() // 2 - alto_ventana // 2
+    posicion = str(ancho_ventana) + "x" + str(alto_ventana) + "+" + str(x_ventana) + "+" + str(y_ventana)
+    ventanaD.title("Departamento")
+    ventanaD.geometry(posicion)
     
     l1= Label(ventanaD,text= "Introduzca departamento")
-    l1.place(x=30,y=10)
+    l1.place(x=50,y=10)
     e1= Entry(ventanaD, textvariable= cmiDepartamento, width=20)
-    e1.place(x=30, y=40)
+    e1.place(x=50, y=40)
     
     def crear():
         miConexion= MySQLdb.connect(*datos)
         miCursor = miConexion.cursor()
+        print(miCursor)
+        print(cmiDepartamento.get())
         try:
-            sql = '''INSERT INTO departamento(dpnombre) VALUES (%s)'''
-            miCursor.execute(sql, (cmiDepartamento.get()))
+            miCursor.execute( "INSERT INTO departamento (dpnombre) VALUES ('%s')" % cmiDepartamento.get())
             miConexion.commit()
             messagebox.showwarning("Mensaje","Datos guardados Exitosamente")
             ventanaD.destroy()
         except:
             messagebox.showwarning("ADVERTENCIA","Ocurrio un error")
             pass
+        
+        miConexion =MySQLdb.connect(*datos)
+        miCursor = miConexion.cursor()
+        try:
+            miCursor.execute('SELECT* FROM departamento')
+            d = miCursor.fetchall()
+        except:
+            pass
+        
+        listaD['values']= d
+        miCursor.close()
         limpiarCampos()
         miCursor.close()   
     b1= Button(ventanaD, text="Guardar", command=crear)
-    b1.place(x=30, y=80)
+    b1.place(x=90, y=80)
     
     ventanaD.mainloop()
-#     #ventanaD = tk.Tk()
-#     var=tk.StringVar(ventanaD)
-#     var.set('Administracion')
-#     opciones=['Finanzas','Atencion','Cobranzas']
-#     opcion=tk.OptionMenu(ventanaD,var,*opciones)
-#     opcion.pack(side='left')
-    
-    
 
 def crearTarjeta():
     cmiTarjeta= StringVar()
+    
     ventanaT = Toplevel()
-    ventanaT.title("Crear Tarjeta")
-    ventanaT.geometry("500x500")
+    ancho_ventana = 300
+    alto_ventana = 150
+    x_ventana = ventanaT.winfo_screenwidth() // 2 - ancho_ventana // 2
+    y_ventana = ventanaT.winfo_screenheight() // 2 - alto_ventana // 2
+    posicion = str(ancho_ventana) + "x" + str(alto_ventana) + "+" + str(x_ventana) + "+" + str(y_ventana)
+    ventanaT.title("Tarjeta")
+    ventanaT.geometry(posicion)
     
     
     l1= Label(ventanaT, text= "Ponga su tarjeta para registrar")
-    l1.place(x=30,y=10)
-#     e1= Entry(ventanaT, textvariable= cmiTarjeta, width=20)
-#     e1.place(x=30, y=40)
-#   b1= Button(ventanaT, text="Guardar")
-#   b1.place(x=30, y=80)
-############Aca le llamo a la funcion del rfid ########3
-    ###################
-    #write()
-    #miTarjeta.set(read())
-#############################################
-    
+    l1.place(x=30,y=10)    
    
-#     def sensor():
-#         reader = SimpleMFRC522()
-#         try:
-#             text="Tarjeta"
-#             #text = input('Valor del NFC:')
-#             print(" Ponga su tarjeta para resgistrar")
-#             reader.write(text)
-#             messagebox.showwarning("Mensaje","Vuelva a pasar la tarjeta")
-#             id, text = reader.read()
-#             print("Registro con Exito")
-#             cmiTarjeta.set(id)
-#         finally:
-#             GPIO.cleanup()
-#             #messagebox.showwarning("ADVERTENCIA","Ocurrio un error")
-#             
-#         print(cmiTarjeta.get())
-#         return cmiTarjeta
+    def sensor():
+        reader = SimpleMFRC522()
+        try:
+            text="Tarjeta"
+            id, text = reader.read()
+            datos_t=("NULO")
+            miCursor = miConexion.cursor()
+            miCursor.execute("SELECT id_tarjeta FROM tarjeta WHERE codigo_rfid= '%s'" %id)
+            datos_t = miCursor.fetchall()
+            if datos_t == ():
+                print ('esta vacia')
+                print(" Ponga su tarjeta para resgistrar")
+                reader.write(text)
+                messagebox.showwarning("Mensaje","Vuelva a pasar la tarjeta")
+                id, text = reader.read()
+                print("Registro con Exito")
+                cmiTarjeta.set(id)
+            else:
+                for fila in datos_t:
+                    print(fila[0])
+                messagebox.showwarning("Mensaje","Su tarjeta ya existe en la BD")
+                ventanaT.destroy()
+        finally:
+            GPIO.cleanup()
+            #messagebox.showwarning("ADVERTENCIA","Ocurrio un error")
+            
+        print(cmiTarjeta.get())
+        return cmiTarjeta
    
-   #e1= Entry(ventanaT, textvariable= miTarjeta, width=20)
-   
-#     b2= Button(ventanaT, text="Registrar", command=sensor)
-#     b2.place(x=30, y=40)
+    b2= Button(ventanaT, text="Registrar", command=sensor)
+    b2.place(x=100, y=40)
     e1= Entry(ventanaT, textvariable= cmiTarjeta, width=20)
-    e1.place(x=30, y=80)
+    e1.place(x=50, y=80)
     
     def crear():
         miConexion =MySQLdb.connect(*datos)
         miCursor = miConexion.cursor()
         print(miCursor)
         try:
-            sql = '''INSERT INTO tarjeta(codigo_rfid)
-                VALUES (%s);'''
-            miCursor.execute(sql,(cmiTarjeta.get()))
+            miCursor.execute( "INSERT INTO tarjeta (codigo_rfid) VALUES ('%s')" % cmiTarjeta.get())
             miConexion.commit()
             messagebox.showwarning("Mensaje","Datos guardados Exitosamente")
             ventanaT.destroy()
         except:
             messagebox.showwarning("ADVERTENCIA","Ocurrio un error")
             pass
+        miConexion =MySQLdb.connect(*datos)
+        miCursor = miConexion.cursor()
+        try:
+            
+            miCursor.execute('SELECT* FROM tarjeta')
+            t = miCursor.fetchall()
+        except:
+            pass
+        listaT['values']= t
+        
         limpiarCampos()
-        #mostrar()
         miCursor.close()
         
     b1= Button(ventanaT, text="Guardar", command=crear)
-    b1.place(x=30, y=120)
-    #Button(self.edit_wind, text = 'Agregar', command = lambda: self.edit_records(new_name.get(), name, new_price.get(), old_price)).grid(row = 4, column = 2, sticky = W)
+    b1.place(x=100, y=110)
     ventanaT.mainloop()
-
-
-    
-    
-    
-    
-
+ 
 def mostrar():
     miConexion =MySQLdb.connect(*datos)
     miCursor = miConexion.cursor()
-    #para evitar que se registre los registros a la hora de mostras
-    
     registro= tree.get_children()# almacenamos todos los elemntos que se encuentre en nuestra tabla si es que lo hay
     for elemento in registro:
         tree.delete(elemento)
@@ -297,26 +325,77 @@ tree.column('#7', width=100)
 tree.heading('#7', text= "Tarjeta", anchor = CENTER)
 
 def seleccionarUsandoClick(event):
+    miConexion =MySQLdb.connect(*datos)
+    miCursor = miConexion.cursor()
     item= tree.identify('item', event.x,event.y)
     miId.set((tree.item(item, "text")))
-    #print(miId.get())
+    print(miId.get())
     miCi.set(tree.item(item, "values")[0])
     miNombre.set(tree.item(item, "values")[1])
     miApellido.set(tree.item(item, "values")[2])
     miCorreo.set(tree.item(item, "values")[3])
     miInfectado.set(tree.item(item, "values")[4])
-    miDepartamento.set(tree.item(item, "values")[5])
-    miTarjeta.set(tree.item(item, "values")[6])  
+    aux_d= tree.item(item, "values")[5]
+    miCursor.execute("SELECT id_departamento FROM departamento WHERE dpnombre= '%s'" %aux_d)
+    datos_d = miCursor.fetchall()
+    for fila in datos_d:
+        print(fila[0])
+        id_d= fila[0]
+    listaD.current(id_d-1)
+    miDepartamento.set(id_d)
+    
+    aux_t= tree.item(item, "values")[6]
+    miCursor.execute("SELECT id_tarjeta FROM tarjeta WHERE codigo_rfid= '%s'" %aux_t)
+    datos_t = miCursor.fetchall()
+    for fila in datos_t:
+        print(fila[0])
+        id_t= fila[0]
+    listaT.current(id_t-1)
+    miTarjeta.set(id_t)
 tree.bind("<Double-1>", seleccionarUsandoClick)    
 
 def actualizarFuncionario():
     miConexion =MySQLdb.connect(*datos)
     miCursor = miConexion.cursor()
+    print(miId.get())
     try:
-        datos = miCi.get(),miNombre.get(),miApellido.get(), miCorreo.get(),miDepartamento.get(),miTarjeta.get()
-        miCursor.execute("UPDATE funcionario SET CI=?, NOMBRE=?, APELLIDO=?, CORREO=?, DEPARTAMENTO=?, TARJETA=? WHERE Id" + miId.get(), (datos))
+        #d = miId.get(), miCi.get(),miNombre.get(),miApellido.get(), miCorreo.get(),miInfectado.get(), miDepartamento.get(),miTarjeta.get()
+        #sql = "UPDATE funcionario SET ci='%s', nombre='%s', apellido='%s', correo='%s', infectado='%s', departamento_id='%s', tarjeta_id='%s' WHERE id_funcionario = %i" %(d, miId.get())
+        #miCursor.execute("UPDATE funcionario SET ci='%s', nombre='%s', apellido='%s', correo='%s', infectado='%s', departamento_id='%s', tarjeta_id='%s' WHERE id_funcionario = %i" %(d, int(miId.get())))
+        #miCursor.execute("UPDATE `funcionario` SET `id_funcionario`= '%s',`ci`='%s',`nombre`='%s',`apellido`='%s',`correo`='%s',`infectado`='%s',`departamento_id`='%s',`tarjeta_id`='%s' WHERE id_funcionario = %i" % (d, miId.get()))
+        miCursor.execute("UPDATE funcionario SET ci='%s' WHERE id_funcionario = %i" % (miCi.get(), miId.get()))
         miConexion.commit()
+        miCursor.execute("UPDATE funcionario SET nombre='%s' WHERE id_funcionario = %i" % (miNombre.get(), miId.get()))
+        miConexion.commit()
+        miCursor.execute("UPDATE funcionario SET apellido='%s' WHERE id_funcionario = %i" % (miApellido.get(), miId.get()))
+        miConexion.commit()
+        miCursor.execute("UPDATE funcionario SET correo='%s' WHERE id_funcionario = %i" % (miCorreo.get(), miId.get()))
+        miConexion.commit()
+        miCursor.execute("UPDATE funcionario SET infectado='%s' WHERE id_funcionario = %i" % (miInfectado.get(), miId.get()))
+        miConexion.commit()
+        
+        miTarjeta.set(listaT.current()+1)
+        miDepartamento.set(listaD.current()+1)
+        miCursor.execute("UPDATE funcionario SET departamento_id='%s' WHERE id_funcionario = %i" % (miDepartamento.get(), miId.get()))
+        miConexion.commit()
+        
+        miCursor.execute("SELECT  * FROM funcionario WHERE tarjeta_id= '%s'" %miTarjeta.get())
+        datos_f = miCursor.fetchall()
+        print(datos_f)
+        for fila in datos_f:
+            print(fila)
+            h= fila[1] + " " + fila[2] + " " + fila[3]+ " " + fila[4]
+        if datos_f != () :   
+            if (fila[0] == miId.get()):
+                miCursor.execute("UPDATE funcionario SET tarjeta_id='%s' WHERE id_funcionario = %i" % (miTarjeta.get(), miId.get()))
+                miConexion.commit()
+            else:
+                messagebox.showwarning("ADVERTENCIA","Esta tarjeta ya fue asignada\n"+ h)
+        else:
+            miCursor.execute("UPDATE funcionario SET tarjeta_id='%s' WHERE id_funcionario = %i" % (miTarjeta.get(), miId.get()))
+            miConexion.commit()         
     except:
+        print("hola")
         messagebox.showwarning("ADVERTENCIA","Ocurrio un error al actualizar un registro")
         pass
     limpiarCampos()
@@ -328,7 +407,7 @@ def borrarFuncionario():
     miCursor = miConexion.cursor()
     try:
         if messagebox.askyesno(message= "Realmente desea eliminar el registro?", title= "ADVERTENCIA"):
-            miCursor.execute("DELETE FROM funcionario WHERE Id=" + miId.get())
+            miCursor.execute("DELETE FROM funcionario WHERE id_funcionario = '%s'" % miId.get())
             miConexion.commit()
     except:
         messagebox.showwarning("ADVERTENCIA","Ocurrio un error al tratar de eliminar el registro")
@@ -381,8 +460,6 @@ e6.place(x=140, y=130)
 
 l7= Label(root, text= "Departamento:")
 l7.place(x=30,y=160)
-# e7= Entry(root, textvariable= miDepartamento, width=50)
-# e7.place(x=140, y=160)
 ###=====Para agregar seleccion multiple
 miConexion =MySQLdb.connect(*datos)
 miCursor = miConexion.cursor()
@@ -396,21 +473,11 @@ miCursor.close()
 listaD= ttk.Combobox(root, width=30,state='readonly')
 listaD.place(x=140,y=155)
 listaD['values']= d
-
+listaD.current(0)
 miDepartamento.set(listaD.get())
-
-# var=tk.StringVar(root)
-# var.set(d[0])
-# opcion=tk.OptionMenu(root,var,*d)
-# opcion.pack(side='left',padx=30,pady=30)
-# opcion.place(x=140,y=155,width=460)
-# miDepartamento.set("")
-# miDepartamento.set(var.get()[1])
 
 l8= Label(root, text= "Tarjeta:")
 l8.place(x=30,y=190)
-# e8= Entry(root, textvariable= miTarjeta, width=50)
-# e8.place(x=140, y=190)
 ###=====Para agregar seleccion multiple
 miConexion =MySQLdb.connect(*datos)
 miCursor = miConexion.cursor()
@@ -424,15 +491,8 @@ miCursor.close()
 listaT= ttk.Combobox(root, width=30,state='readonly')
 listaT.place(x=140,y=190)
 listaT['values']= t
+listaT.current(0)
 miTarjeta.set(listaT.get())
-# varT=tk.StringVar(root)
-# varT.set("rojo")
-# op=['a','b']
-# opcionT=tk.OptionMenu(root,varT,*op)
-# opcionT.pack(side='left',padx=30,pady=30)
-# opcionT.place(x=140,y=190,width=460)
-# miTarjeta.set("")
-# miTarjeta.set(varT.get()[1])
 
 ######creando botones######
 b1= Button(root, text="Crear Registro", command=crearFuncionario)
@@ -448,25 +508,35 @@ b5.place(x=700, y=200)
 b6= Button(root, text="Agregar Departamento", command= crearDepartamento)
 b6.place(x=700, y=240)
 #### Boton para editar cambios
-def editarFuncionario():
-#     message = ''
-#     try:
-#         tree.item(tree.selection())['values'][0]
-#     except IndexError as e:
-#         message = 'Por favor selecciona un dato'
-#         return
-#     miNombre= tree.item(tree.selection())['text']
-#     #old_price = self.tree.item(self.tree.selection())['values'][0]
-    edit_wind = Toplevel()
-    edit_wind.title("Ventana nueva")
-    edit_wind.geometry("500x500")
-b7= Button(root, text="Editar", command= editarFuncionario)
+def IngresoFuncionario():
+    reader = SimpleMFRC522()
+    try:
+        text="Tarjeta"
+        id, text = reader.read()
+        datos_t=("NULO")
+        miCursor = miConexion.cursor()
+        
+        miCursor.execute("SELECT id_tarjeta FROM tarjeta WHERE codigo_rfid= '%s'" %id)
+        datos_t = miCursor.fetchall()
+        for fila in datos_t:
+                    print(fila[0])
+                    id_t= fila[0]
+        print(id_t)    
+        miCursor.execute("SELECT  * FROM funcionario WHERE tarjeta_id= '%s'" %id_t)
+        datos_t = miCursor.fetchall()
+        print(datos_t)
+        if(datos_t == ()):
+            messagebox.showwarning("FUNCIONARIO","\t\t\tTARJETA SIN ASIGNAR\t\t\t\n")
+        else:
+            for fila in datos_t:
+                print(fila)
+                h= fila[2] + " " + fila[3] + "  CI:" + fila[1]
+            messagebox.showwarning("FUNCIONARIO","\t\t\tESTA TARJETA CORRESPONDE A\t\t\t\n"+ h)
+    except:
+        pass
+
+b7= Button(root, text="INGRESO", command= IngresoFuncionario)
 b7.place(x=700, y=280)
 
-#ttk.Button(text = 'EDIT', command = self.edit_product).grid(row = 5, column = 1, sticky = W + E)
-
-
 root.config(menu=menubar)
-# write()
-# read()
 root.mainloop()
