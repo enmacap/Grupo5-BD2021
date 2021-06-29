@@ -21,3 +21,10 @@ Registro de funcionario y la Generación de la tarjeta RFID
 - Isaura Flores
 - Ricardo Fabio
 - Rodney Rojas
+
+# Lenguajes Utilizados
+
+# Framework Utilizado
+
+# Informacion sobre el motor de base de datos
+
