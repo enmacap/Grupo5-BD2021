@@ -27,8 +27,6 @@ Registro de funcionario y la Generación de la tarjeta RFID
 - Python
 - SQL
 
-# Framework Utilizado
-
 
 # Informacion sobre el motor de base de datos
 
